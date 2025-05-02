@@ -122,9 +122,9 @@ end
 -- Anti-Exploit: Advanced detection
 local function AntiExploitDetection()
     local exploitPatterns = {
-        {Check = function(player) return player.Character.Humanoid.WalkSpeed > 50 end, Reason = "Excessive WalkSpeed"},
-        {Check = function(player) return player.Character.Humanoid.JumpPower > 100 end, Reason = "Excessive JumpPower"},
-        {Check = function(player) return player.Character.HumanoidRootPart.Velocity.Magnitude > 1000 end, Reason = "Unnatural Velocity"}
+        {Check = function(player) return player.Character and player.Character.Humanoid.WalkSpeed > 50 end, Reason = "Excessive WalkSpeed"},
+        {Check = function(player) return player.Character and player.Character.Humanoid.JumpPower > 100 end, Reason = "Excessive JumpPower"},
+        {Check = function(player) return player.Character and player.Character.HumanoidRootPart.Velocity.Magnitude > 1000 end, Reason = "Unnatural Velocity"}
     }
     local behaviorLog = {}
     while _G.QuantumSettings.AntiExploitDetection do
@@ -141,8 +141,8 @@ local function AntiExploitDetection()
                     end
                 end
             end
-        }
-        task.wait(0.5)
+        end
+        task.wait(1)
     end
 end
 
@@ -231,7 +231,7 @@ local ScrollFrame = Instance.new("ScrollingFrame")
 ScrollFrame.Size = UDim2.new(0.9, 0, 0.8, 0)
 ScrollFrame.Position = UDim2.new(0.05, 0, 0.15, 0)
 ScrollFrame.BackgroundTransparency = 1
-ScrollFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 3, 0) -- Reduced for mobile
 ScrollFrame.ScrollBarThickness = 4
 ScrollFrame.Parent = MainFrame
 
@@ -269,7 +269,7 @@ for category, settings in pairs(Categories) do
                 totalHeight = totalHeight + (#Categories[cat] * 0.05)
             end
         end
-        ScrollFrame.CanvasSize = UDim2.new(0, 0, math.max(totalHeight, 5), 0)
+        ScrollFrame.CanvasSize = UDim2.new(0, 0, math.max(totalHeight, 3), 0)
     end)
 
     yOffset = yOffset + 0.06
@@ -308,6 +308,10 @@ end
 -- Feature Implementations
 local function AutoFarmLevel()
     while _G.QuantumSettings.AutoFarmLevel do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         local quest = nil
         for _, q in pairs(workspace.Quests:GetChildren()) do
             if q:IsA("Model") and q:FindFirstChild("QuestData") then
@@ -330,12 +334,16 @@ local function AutoFarmLevel()
                 ReplicatedStorage.Remotes.QuestRemote:FireServer("Accept")
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoFarmBoss()
     while _G.QuantumSettings.AutoFarmBoss do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         local bosses = {}
         for _, boss in pairs(workspace.Enemies:GetChildren()) do
             if boss:IsA("Model") and boss.Name:find("Boss") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
@@ -347,7 +355,7 @@ local function AutoFarmBoss()
             VirtualUser:ClickButton1(Vector2.new())
             SimulateHumanBehavior()
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -355,29 +363,37 @@ local function AutoFarmHaki()
     while _G.QuantumSettings.AutoFarmHaki do
         ReplicatedStorage.Remotes.HakiRemote:FireServer("Train")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function AutoFarmChest()
     while _G.QuantumSettings.AutoFarmChest do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         local chests = {}
         for _, chest in pairs(workspace:GetChildren()) do
             if chest.Name:find("Chest") then
                 table.insert(chests, chest)
             end
-        }
+        end
         if #chests > 0 then
             LocalPlayer.Character.HumanoidRootPart.CFrame = chests[1].CFrame
             ReplicatedStorage.Remotes.CollectChest:FireServer(chests[1])
             SimulateHumanBehavior()
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoRaid()
     while _G.QuantumSettings.AutoRaid do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         ReplicatedStorage.Remotes.RaidRemote:FireServer("Join")
         local enemies = {}
         for _, enemy in pairs(workspace.Enemies:GetChildren()) do
@@ -390,24 +406,32 @@ local function AutoRaid()
             VirtualUser:ClickButton1(Vector2.new())
             SimulateHumanBehavior()
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoSeaEvents()
     while _G.QuantumSettings.AutoSeaEvents do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, event in pairs(workspace:GetChildren()) do
             if event.Name:find("SeaEvent") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = event.CFrame
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoLeviathan()
     while _G.QuantumSettings.AutoLeviathan do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, leviathan in pairs(workspace:GetChildren()) do
             if leviathan.Name:find("Leviathan") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = leviathan.CFrame + Vector3.new(0, 10, 0)
@@ -416,12 +440,16 @@ local function AutoLeviathan()
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoTerrorshark()
     while _G.QuantumSettings.AutoTerrorshark do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, shark in pairs(workspace:GetChildren()) do
             if shark.Name:find("Terrorshark") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = shark.CFrame + Vector3.new(0, 10, 0)
@@ -430,12 +458,16 @@ local function AutoTerrorshark()
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoSeaBeast()
     while _G.QuantumSettings.AutoSeaBeast do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, beast in pairs(workspace:GetChildren()) do
             if beast.Name:find("SeaBeast") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = beast.CFrame + Vector3.new(0, 10, 0)
@@ -444,12 +476,16 @@ local function AutoSeaBeast()
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoGhostShip()
     while _G.QuantumSettings.AutoGhostShip do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, ship in pairs(workspace:GetChildren()) do
             if ship.Name:find("GhostShip") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = ship.CFrame + Vector3.new(0, 10, 0)
@@ -458,38 +494,60 @@ local function AutoGhostShip()
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function FruitSniper()
     while _G.QuantumSettings.FruitSniper do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, fruit in pairs(workspace:GetChildren()) do
-            if fruit.Name:find("Fruit") and fruit:IsA("Model") and fruit:FindFirstChild("Handle") then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = fruit.Handle.CFrame
-                ReplicatedStorage.Remotes.PickFruit:FireServer(fruit)
-                SimulateHumanBehavior()
-                break
+            if fruit.Name:find("Fruit") and fruit:IsA("Model") then
+                local handle = fruit:FindFirstChild("Handle") or fruit:FindFirstChildOfClass("BasePart")
+                if handle then
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = handle.CFrame
+                    ReplicatedStorage.Remotes.PickFruit:FireServer(fruit)
+                    SimulateHumanBehavior()
+                    break
+                else
+                    print("FruitSniper: Handle not found for " .. fruit.Name)
+                end
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function TeleportToFruit()
     while _G.QuantumSettings.TeleportToFruit do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, fruit in pairs(workspace:GetChildren()) do
-            if fruit.Name:find("Fruit") and fruit:IsA("Model") and fruit:FindFirstChild("Handle") then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = fruit.Handle.CFrame
-                break
+            if fruit.Name:find("Fruit") and fruit:IsA("Model") then
+                local handle = fruit:FindFirstChild("Handle") or fruit:FindFirstChildOfClass("BasePart")
+                if handle then
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = handle.CFrame
+                    break
+                else
+                    print("TeleportToFruit: Handle not found for " .. fruit.Name)
+                end
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function IslandTeleport()
     while _G.QuantumSettings.IslandTeleport do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         local islands = {
             {Name = "Windmill", CFrame = CFrame.new(1000, 50, 1000)},
             {Name = "Cafe", CFrame = CFrame.new(100000, 50, 100000)},
@@ -499,12 +557,16 @@ local function IslandTeleport()
             LocalPlayer.Character.HumanoidRootPart.CFrame = island.CFrame
             task.wait(2)
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function PlayerBountyFarm()
     while _G.QuantumSettings.PlayerBountyFarm do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, player in pairs(Players:GetPlayers()) do
             if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 6, 0)
@@ -513,7 +575,7 @@ local function PlayerBountyFarm()
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -521,31 +583,39 @@ local function AutoRaceV4()
     while _G.QuantumSettings.AutoRaceV4 do
         ReplicatedStorage.Remotes.RaceV4Remote:FireServer("Start")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function AutoMirageIsland()
     while _G.QuantumSettings.AutoMirageIsland do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, island in pairs(workspace:GetChildren()) do
             if island.Name:find("MirageIsland") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = island.CFrame
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoPrehistoricIsland()
     while _G.QuantumSettings.AutoPrehistoricIsland do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, island in pairs(workspace:GetChildren()) do
             if island.Name:find("PrehistoricIsland") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = island.CFrame
                 break
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -553,7 +623,7 @@ local function AutoDojoQuest()
     while _G.QuantumSettings.AutoDojoQuest do
         ReplicatedStorage.Remotes.DojoQuestRemote:FireServer("Start")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -565,7 +635,7 @@ local function AutoStoreFruits()
                 SimulateHumanBehavior()
             end
         end
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -573,7 +643,7 @@ local function AutoQuestCompletion()
     while _G.QuantumSettings.AutoQuestCompletion do
         ReplicatedStorage.Remotes.QuestRemote:FireServer("Complete")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -581,24 +651,29 @@ local function AutoFruitMastery()
     while _G.QuantumSettings.AutoFruitMastery do
         ReplicatedStorage.Remotes.UseSkillRemote:FireServer("Fruit")
         SimulateHumanBehavior()
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoBossRush()
     while _G.QuantumSettings.AutoBossRush do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         ReplicatedStorage.Remotes.BossRushRemote:FireServer("Start")
         local bosses = {}
         for _, boss in pairs(workspace.Enemies:GetChildren()) do
             if boss:IsA("Model") and boss.Name:find("Boss") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
                 table.insert(bosses, boss)
             end
+        end
         if #bosses > 0 then
             LocalPlayer.Character.HumanoidRootPart.CFrame = bosses[1].HumanoidRootPart.CFrame + Vector3.new(0, 6, 0)
             VirtualUser:ClickButton1(Vector2.new())
             SimulateHumanBehavior()
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -617,6 +692,10 @@ end
 
 local function AutoDodge()
     while _G.QuantumSettings.AutoDodge do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, enemy in pairs(workspace.Enemies:GetChildren()) do
             if enemy:IsA("Model") and enemy:FindFirstChild("HumanoidRootPart") then
                 local distance = (enemy.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -626,7 +705,7 @@ local function AutoDodge()
                 end
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -634,7 +713,7 @@ local function AutoFruitUpgrader()
     while _G.QuantumSettings.AutoFruitUpgrader do
         ReplicatedStorage.Remotes.UpgradeFruitRemote:FireServer("Upgrade")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -653,7 +732,7 @@ local function AdvancedESP()
                 end)
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
@@ -672,21 +751,21 @@ local function CombatESP()
                 end)
             end
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function PredictiveFruitSpawn()
     while _G.QuantumSettings.PredictiveFruitSpawn do
         -- Placeholder: Implement spawn prediction logic
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function DynamicHUD()
     while _G.QuantumSettings.DynamicHUD do
         -- Placeholder: Implement dynamic HUD
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -695,23 +774,27 @@ local function SpectatePlayer()
         if _G.QuantumSettings.SpectatePlayer and _G.QuantumSettings.SpectatePlayer.Character then
             Camera.CameraSubject = _G.QuantumSettings.SpectatePlayer.Character.Humanoid
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function TeleportToPlayer()
     while _G.QuantumSettings.TeleportToPlayer do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         if _G.QuantumSettings.TeleportToPlayer and _G.QuantumSettings.TeleportToPlayer.Character then
             LocalPlayer.Character.HumanoidRootPart.CFrame = _G.QuantumSettings.TeleportToPlayer.Character.HumanoidRootPart.CFrame
         end
-        task.wait(0.5)
+        task.wait(1)
     end
 end
 
 local function AutoTranslateChat()
     while _G.QuantumSettings.AutoTranslateChat do
         -- Placeholder: Implement chat translation
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -727,14 +810,14 @@ local function AutoSkillTrainer()
     while _G.QuantumSettings.AutoSkillTrainer do
         ReplicatedStorage.Remotes.SkillRemote:FireServer("Train")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function TradeScanner()
     while _G.QuantumSettings.TradeScanner do
         -- Placeholder: Implement trade scanning
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -750,7 +833,7 @@ local function AutoAwakening()
     while _G.QuantumSettings.AutoAwakening do
         ReplicatedStorage.Remotes.AwakeningRemote:FireServer("Start")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -758,14 +841,14 @@ local function AutoQuestPrioritizer()
     while _G.QuantumSettings.AutoQuestPrioritizer do
         ReplicatedStorage.Remotes.QuestRemote:FireServer("Prioritize")
         SimulateHumanBehavior()
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function InventoryManager()
     while _G.QuantumSettings.InventoryManager do
         -- Placeholder: Implement inventory management
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -800,12 +883,16 @@ end
 local function ResourceHeatmap()
     while _G.QuantumSettings.ResourceHeatmap do
         -- Placeholder: Implement resource heatmap
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function ProximityAlerts()
     while _G.QuantumSettings.ProximityAlerts do
+        if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(1)
+            return
+        end
         for _, player in pairs(Players:GetPlayers()) do
             if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 local distance = (player.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -814,18 +901,22 @@ local function ProximityAlerts()
                 end
             end
         end
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function CustomCrosshair()
     while _G.QuantumSettings.CustomCrosshair do
         -- Placeholder: Implement custom crosshair
-        task.wait(1)
+        task.wait(2)
     end
 end
 
 local function FlyMode()
+    if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        task.wait(1)
+        return
+    end
     local bodyVelocity = Instance.new("BodyVelocity")
     bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
     bodyVelocity.Parent = LocalPlayer.Character.HumanoidRootPart
@@ -853,7 +944,7 @@ end
 local function AnalyticsDashboard()
     while _G.QuantumSettings.AnalyticsDashboard do
         -- Placeholder: Implement analytics dashboard
-        task.wait(1)
+        task.wait(2)
     end
 end
 
@@ -907,7 +998,7 @@ local function ManageFeatures()
         if _G.QuantumSettings.FlyMode then task.spawn(FlyMode) end
         if _G.QuantumSettings.ServerLoadBalancer then task.spawn(ServerLoadBalancer) end
         if _G.QuantumSettings.AnalyticsDashboard then task.spawn(AnalyticsDashboard) end
-        task.wait(1)
+        task.wait(2)
     end
 end
 task.spawn(ManageFeatures)
@@ -940,7 +1031,7 @@ if _G.QuantumSettings.PerformanceProfiler then task.spawn(PerformanceProfiler) e
 
 -- Dynamic Themes
 local function UpdateTheme()
-    if _G.QuantumSettings.DynamicGUIThemes then
+    while _G.QuantumSettings.DynamicGUIThemes do
         CurrentTheme = Themes[math.random(1, 2) == 1 and "Dark" or "Light"]
         MainFrame.BackgroundColor3 = CurrentTheme.Background
         TitleLabel.TextColor3 = CurrentTheme.Accent
@@ -953,8 +1044,14 @@ local function UpdateTheme()
                 end
             end
         end
+        task.wait(30)
     end
 end
 if _G.QuantumSettings.DynamicGUIThemes then task.spawn(UpdateTheme) end
+
+-- Mobile Touch Support
+UserInputService.TouchTap:Connect(function()
+    print("QuantumHubV5: Touch input detected")
+end)
 
 print("QuantumHubV5: Initialized successfully")
