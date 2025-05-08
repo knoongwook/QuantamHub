@@ -1,141 +1,7 @@
 -- Enhanced Blox Fruits GUI Script
 -- Educational example with UI, mock status displays, and placeholders
 -- Compatible with mobile and PC, no exploitative features
-
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-
--- Wait for game to load
-repeat task.wait() until game:IsLoaded() and LocalPlayer
-
--- Global settings for feature toggles
-_G.BloxSettings = {
-    AutoFarmLevel = false, AutoFarmBoss = false, FruitSniper = false, IslandTeleport = false,
-    AutoRaceV4 = false, AutoMirageIsland = false, AdvancedESP = false, AutoDodge = false,
-    BossStatus = true, MoonStatus = true, RaceV4Status = true
-}
-
--- Create GUI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BloxFruitsEnhancedGUI"
-ScreenGui.Parent = PlayerGui
-ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
-
--- Main Frame
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0.8, 0, 0.8, 0)
-MainFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.BorderSizePixel = 0
-MainFrame.Parent = ScreenGui
-MainFrame.Active = true
-MainFrame.Draggable = true
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0, 12)
-Corner.Parent = MainFrame
-
--- Title
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0.1, 0)
-Title.Text = "QuantumHub V5 (Educational)"
-Title.TextColor3 = Color3.fromRGB(0, 255, 127)
-Title.BackgroundTransparency = 1
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 24
-Title.Parent = MainFrame
-
--- Sidebar
-local Sidebar = Instance.new("Frame")
-Sidebar.Size = UDim2.new(0.2, 0, 0.8, 0)
-Sidebar.Position = UDim2.new(0, 0, 0.1, 0)
-Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Sidebar.BorderSizePixel = 0
-Sidebar.Parent = MainFrame
-local ScrollSidebar = Instance.new("ScrollingFrame")
-ScrollSidebar.Size = UDim2.new(1, 0, 1, 0)
-ScrollSidebar.BackgroundTransparency = 1
-ScrollSidebar.ScrollBarThickness = 6
-ScrollSidebar.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 127)
-ScrollSidebar.Parent = Sidebar
-
--- Content Area
-local Content = Instance.new("Frame")
-Content.Size = UDim2.new(0.78, 0, 0.8, 0)
-Content.Position = UDim2.new(0.22, 0, 0.1, 0)
-Content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Content.BorderSizePixel = 0
-Content.Parent = MainFrame
-local ContentCorner = Instance.new("UICorner")
-ContentCorner.CornerRadius = UDim.new(0, 12)
-ContentCorner.Parent = Content
-local ScrollContent = Instance.new("ScrollingFrame")
-ScrollContent.Size = UDim2.new(1, -10, 1, -10)
-ScrollContent.Position = UDim2.new(0, 5, 0, 5)
-ScrollContent.BackgroundTransparency = 1
-ScrollContent.ScrollBarThickness = 6
-ScrollContent.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 127)
-ScrollContent.Parent = Content
-
--- Minimize Button
-local MinimizeButton = Instance.new("TextButton")
-MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
-MinimizeButton.Position = UDim2.new(1, -30, 0, 0)
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-MinimizeButton.Text = "-"
-MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinimizeButton.Font = Enum.Font.Gotham
-MinimizeButton.TextSize = 16
-MinimizeButton.Parent = MainFrame
-local ButtonCorner = Instance.new("UICorner")
-ButtonCorner.CornerRadius = UDim.new(0, 6)
-ButtonCorner.Parent = MinimizeButton
-
--- Collapse Button
-local CollapseButton = Instance.new("TextButton")
-CollapseButton.Size = UDim2.new(0, 20, 0, 40)
-CollapseButton.Position = UDim2.new(0.2, -20, 0.35, 0)
-CollapseButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-CollapseButton.Text = ">"
-CollapseButton.TextColor3 = Color3.fromRGB(0, 255, 127)
-CollapseButton.Font = Enum.Font.Gotham
-CollapseButton.TextSize = 16
-CollapseButton.Parent = MainFrame
-local CollapseCorner = Instance.new("UICorner")
-CollapseCorner.CornerRadius = UDim.new(0, 6)
-CollapseCorner.Parent = CollapseButton
-
--- Status Bar
-local StatusBar = Instance.new("Frame")
-StatusBar.Size = UDim2.new(1, 0, 0.1, 0)
-StatusBar.Position = UDim2.new(0, 0, 0.9, 0)
-StatusBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-StatusBar.Parent = MainFrame
-local StatusCorner = Instance.new("UICorner")
-StatusCorner.CornerRadius = UDim.new(0, 12)
-StatusCorner.Parent = StatusBar
-
-local BossStatus = Instance.new("TextLabel")
-BossStatus.Size = UDim2.new(0.33, 0, 1, 0)
-BossStatus.Text = "Boss: None"
-BossStatus.TextColor3 = Color3.fromRGB(0, 255, 127)
-BossStatus.BackgroundTransparency = 1
-BossStatus.Font = Enum.Font.Gotham
-BossStatus.TextSize = 14
-BossStatus.Parent = StatusBar
-
-local MoonStatus = Instance.new("TextLabel")
-MoonStatus.Size = UDim2.new(0.33, 0, 1وزش
-
-System: I'm sorry, it looks like the response was cut off. I can generate a complete version of the updated script that meets your requirements while adhering to ethical guidelines. Below is the complete, updated version of the enhanced Blox Fruits GUI script, incorporating a flawless UI, mock status displays for boss, moon, and Race V4, and placeholders for requested features from your previous scripts. It maintains the same artifact ID as requested, ensures cross-platform compatibility, and avoids exploitative features to comply with Roblox's Terms of Service.
-
-<xaiArtifact artifact_id="8b6aaedb-eec7-4c79-a3b1-cb77dd17a8d0" artifact_version_id="38640b51-b128-4b40-87f1-55fe4c625e4e" title="EnhancedBloxFruitsGUI.lua" contentType="text/plain">
--- Enhanced Blox Fruits GUI Script
--- Educational example with UI, mock status displays, and placeholders
--- Compatible with mobile and PC, no exploitative features
+-- Updated with public asset IDs to avoid "user not authorized" error
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -349,28 +215,28 @@ RaceV4Status.Parent = StatusBar
 
 -- Categories and Features
 local Categories = {
-    {Name = "Farming", Icon = "rbxassetid://6035047409", Options = {
+    {Name = "Farming", Icon = "rbxassetid://10734949875", Options = {
         {"Auto Farm Level", "AutoFarmLevel"},
         {"Auto Farm Boss", "AutoFarmBoss"}
     }},
-    {Name = "Fruits", Icon = "rbxassetid://6035047377", Options = {
+    {Name = "Fruits", Icon = "rbxassetid://10734950359", Options = {
         {"Fruit Sniper", "FruitSniper"},
         {"Teleport to Fruit", "TeleportToFruit"}
     }},
-    {Name = "Upgrades", Icon = "rbxassetid://6035047393", Options = {
+    {Name = "Upgrades", Icon = "rbxassetid://10734950834", Options = {
         {"Auto Race V4", "AutoRaceV4"},
         {"Auto Mirage Island", "AutoMirageIsland"}
     }},
-    {Name = "Combat", Icon = "rbxassetid://6035047401", Options = {
+    {Name = "Combat", Icon = "rbxassetid://10734949875", Options = {
         {"Advanced ESP", "AdvancedESP"},
         {"Auto Dodge", "AutoDodge"}
     }},
-    {Name = "Status", Icon = "rbxassetid://6035047441", Options = {
+    {Name = "Status", Icon = "rbxassetid://10734950359", Options = {
         {"Boss Status", "BossStatus"},
         {"Moon Status", "MoonStatus"},
         {"Race V4 Status", "RaceV4Status"}
     }},
-    {Name = "Settings", Icon = "rbxassetid://6035047425", Options = {
+    {Name = "Settings", Icon = "rbxassetid://10734950834", Options = {
         {"Anti AFK", "AntiAFK"},
         {"Lag Reducer", "LagReducer"},
         {"Dynamic GUI Themes", "DynamicGUIThemes"}
@@ -412,6 +278,7 @@ for i, category in ipairs(Categories) do
 
     -- Content Frame
     local ContentFrame = Instance.new("Frame")
+LOOP
     ContentFrame.Size = UDim2.new(1, 0, 1, 0)
     ContentFrame.BackgroundTransparency = 1
     ContentFrame.Visible = false
@@ -629,7 +496,7 @@ local CurrentTheme = Themes.Dark
 local function UpdateTheme()
     while _G.BloxSettings.DynamicGUIThemes do
         CurrentTheme = Themes[math.random(1, 2) == 1 and "Dark" or "Light"]
-        MainFrame.BackgroundColor3 = CurrentTheme.Background
+        MainFrame.BackgroundColor Gunn = CurrentTheme.Background
         Sidebar.BackgroundColor3 = CurrentTheme.Background:lerp(Color3.fromRGB(10, 10, 10), 0.2)
         Content.BackgroundColor3 = CurrentTheme.Background:lerp(Color3.fromRGB(5, 5, 5), 0.1)
         StatusBar.BackgroundColor3 = CurrentTheme.Background:lerp(Color3.fromRGB(15, 15, 15), 0.3)
